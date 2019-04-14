@@ -18,7 +18,6 @@ parameters {
     stages {
 	    stage('DockerDockerRepo') {
             steps {
-                sh  "rm -rf myprod"
                 sh "git clone https://github.com/nixvipin/myprod.git \$WORKSPACE/myprod"
             }
 		}
