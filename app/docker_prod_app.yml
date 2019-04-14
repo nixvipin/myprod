@@ -1,0 +1,12 @@
+---
+- hosts: 127.0.0.1
+  tasks:
+      - name: creating image
+        docker_image:
+          name: tomcat
+          dockerfile: Dockerfile
+          pull: yes
+          #push: yes
+          repository: nixvipin/myapp:1.0
+          state: present
+
