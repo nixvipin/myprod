@@ -5,13 +5,14 @@ parameters {
     string( name: 'war_ver',
             defaultValue: '${REL_VERSION}',
             description: 'Release number' )
-            
     string( name: 'NEXUS_IP',
             defaultValue: '${NEXUS_IP}',
             description: 'Nexus IP' )        
-            
     string( name: 'DOCKER_USERNAME',
             defaultValue: '${DOCKER_USERNAME}',
+            description: 'Docker Username' )        
+    string( name: 'TAG_NAME',
+            defaultValue: '${TAG_NAME}',
             description: 'Docker Username' )        
   }
   
