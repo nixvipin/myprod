@@ -3,21 +3,22 @@ pipeline {
 	
 parameters {
     string( name: 'war_ver',
-            defaultValue: '2.0.0',
+            defaultValue: '${REL_VERSION}',
             description: 'Release number' )
             
     string( name: 'NEXUS_IP',
-            defaultValue: '172.31.35.191',
+            defaultValue: '${NEXUS_IP}',
             description: 'Nexus IP' )        
             
     string( name: 'DOCKER_USERNAME',
-            defaultValue: 'nixvipin',
+            defaultValue: '${DOCKER_USERNAME}',
             description: 'Docker Username' )        
   }
   
     stages {
 	    stage('DockerDockerRepo') {
             steps {
+                sh  "rm -rf myprod"
                 sh "git clone https://github.com/nixvipin/myprod.git \$WORKSPACE/myprod"
             }
 		}
@@ -28,8 +29,12 @@ parameters {
 	    }
 	    stage('DockerImageBuild') {
             steps {
-                sh "echo ${params.DOCKER_USERNAME}"
-                sh  "docker build --build-arg war_ver=${params.war_ver} --build-arg NEXUS_IP=${params.NEXUS_IP} -t ${params.DOCKER_USERNAME}/mytomcat -f \$WORKSPACE/myprod/app/Dockerfile ."           
+                sh  "docker build --build-arg war_ver=${params.war_ver} --build-arg NEXUS_IP=${params.NEXUS_IP} -t ${params.DOCKER_USERNAME}/mytomcat:${params.TAG_NAME} -f \$WORKSPACE/myprod/app/Dockerfile ."           
+		    }
+	    }
+	    stage('DockerImagePush') {
+            steps {
+                sh  "docker image push ${params.DOCKER_USERNAME}/mytomcat:${params.TAG_NAME}"
 		    }
 	    }
     }    
