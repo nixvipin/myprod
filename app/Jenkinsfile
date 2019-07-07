@@ -3,17 +3,17 @@ pipeline {
 	
 parameters {
     string( name: 'war_ver',
-            defaultValue: '${REL_VERSION}',
+            defaultValue: '',
             description: 'Release number' )
     string( name: 'NEXUS_IP',
-            defaultValue: '${NEXUS_IP}',
+            defaultValue: '',
             description: 'Nexus IP' )        
     string( name: 'DOCKER_USERNAME',
-            defaultValue: '${DOCKER_USERNAME}',
+            defaultValue: '',
             description: 'Docker Username' )        
     string( name: 'TAG_NAME',
-            defaultValue: '${TAG_NAME}',
-            description: 'Docker Username' )        
+            defaultValue: '',
+            description: 'Docker Tag name/number' )        
   }
   
     stages {
