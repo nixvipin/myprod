@@ -37,6 +37,21 @@ parameters {
             steps {
                 sh  "docker image push ${params.DOCKER_USERNAME}/mytomcat:${params.TAG_NAME}"
 		    }
+	    }    
+
+	    stage('DockerCleanup') {
+		    agent { label 'docker' }
+            steps {
+                sh  "sudo docker stop tomcat || whoami"
+                sh "sudo docker rm tomcat || whoami"
+				sh "sudo docker rmi nixvipin/mytomcat:$TAG_NAME || whoami"
+            }
+		}
+	    stage('DockerContLaunch') {
+		    agent { label 'docker' }	
+            steps {
+                sh  "sudo sudo docker run --net mynetwork --ip 172.20.0.20 -d --name tomcat --link mysql -p 8001:8080 $DOCKER_USERNAME/mytomcat:$TAG_NAME"
+		    }
 	    }
-    }    
+	}
 }
