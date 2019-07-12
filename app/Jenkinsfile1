@@ -1,0 +1,41 @@
+pipeline {
+    agent { label 'master' }
+	
+parameters {
+    string( name: 'war_ver',
+            defaultValue: '',
+            description: 'Release number' )
+    string( name: 'NEXUS_IP',
+            defaultValue: '',
+            description: 'Nexus IP' )        
+    string( name: 'DOCKER_USERNAME',
+            defaultValue: '',
+            description: 'Docker Username' )        
+    string( name: 'TAG_NAME',
+            defaultValue: '',
+            description: 'Docker Tag name/number' )        
+  }
+  
+    stages {
+	    stage('DockerDockerRepo') {
+            steps {
+                sh  "rm -rf myprod"
+                sh "git clone https://github.com/nixvipin/myprod.git \$WORKSPACE/myprod"
+            }
+		}
+	    stage('DockerImageDelete') {
+            steps {
+                sh  "docker rmi \$(docker images -q) -f || date"
+		    }
+	    }
+	    stage('DockerImageBuild') {
+            steps {
+                sh  "docker build --build-arg war_ver=${params.war_ver} --build-arg NEXUS_IP=${params.NEXUS_IP} -t ${params.DOCKER_USERNAME}/mytomcat:${params.TAG_NAME} -f \$WORKSPACE/myprod/app/Dockerfile ."           
+		    }
+	    }
+	    stage('DockerImagePush') {
+            steps {
+                sh  "docker image push ${params.DOCKER_USERNAME}/mytomcat:${params.TAG_NAME}"
+		    }
+	    }
+}
