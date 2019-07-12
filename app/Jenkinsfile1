@@ -38,4 +38,6 @@ parameters {
                 sh  "docker image push ${params.DOCKER_USERNAME}/mytomcat:${params.TAG_NAME}"
 		    }
 	    }
+    }
 }
+
