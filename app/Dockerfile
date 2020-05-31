@@ -1,4 +1,4 @@
-FROM tomcat
+FROM tomcat:jdk8
 USER root
 ARG war_ver
 ARG NEXUS_IP
